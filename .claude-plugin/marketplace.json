@@ -1,0 +1,14 @@
+{
+  "name": "sdd-suite",
+  "owner": {
+    "name": "ZOPC"
+  },
+  "plugins": [
+    {
+      "name": "sdd-suite",
+      "source": "./",
+      "description": "三阶段 SDD skill 套件:需求方案制定 → 设计落地 → 技术架构。",
+      "version": "0.1.0"
+    }
+  ]
+}
