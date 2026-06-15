@@ -1,7 +1,7 @@
 {
   "name": "sdd-suite",
-  "version": "0.2.0",
-  "description": "三阶段 SDD skill 套件:需求方案制定 → 设计落地 → 技术架构。用文件化中间态 + 强制引用 + 阶段间 gate,让 AI 从模糊想法走到可执行架构而不跑偏。",
+  "version": "0.3.0",
+  "description": "spec 为中心的 SDD skill 套件:把模糊想法逼成一份够厚的 spec.md(需求 + 页面与功能 + 技术方案),设计交外部 AI 工具、开发交 coding agent,tech-spec 可选。",
   "author": {
     "name": "ZOPC"
   },

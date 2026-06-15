@@ -1,6 +1,6 @@
 ---
 name: tech-spec
-description: 技术方案 / 架构制定(第三阶段)。读取已批准的 spec.md + design.md,产出技术选型矩阵、架构决策记录(ADR)、数据模型、接口契约、plan.md 与原子化可并行的 tasks.md。Use when spec.md and design.md exist and the user needs a technical / architecture plan before coding. 触发词:技术方案 / 架构 / 选型 / 技术栈 / 数据模型 / 数据库 / 接口 / API 契约 / 开发计划 / 拆任务 / plan.md。需要 spec.md + design.md 作为输入。
+description: 技术方案 / 架构制定(可选,复杂 / 团队项目)。读取已批准的 spec.md(及可选设计稿),把 spec 的「核心技术实现方案」段深化为技术选型矩阵、架构决策记录(ADR)、数据模型、接口契约、plan.md 与原子化可并行的 tasks.md。Use when a spec.md exists and a complex or team project needs a deep technical / architecture plan before coding (solo / simple projects can skip this and go spec → coding agent). 触发词:技术方案 / 架构 / 选型 / 技术栈 / 数据模型 / 数据库 / 接口 / API 契约 / 开发计划 / 拆任务 / plan.md。需要 spec.md 作为输入。
 ---
 
 # tech-spec · 技术 / 架构方案
@@ -12,8 +12,8 @@ description: 技术方案 / 架构制定(第三阶段)。读取已批准的 spec
 ## 启动
 
 1. 读 `CONSTITUTION.md`。
-2. **强制引用**:唯一合法输入是 `spec.md` + `design.md`。缺任一则停下回上一阶段。
-3. 产出落到 `docs/sdd/<slug>/` 下:`plan.md`、`data-model.md`、`contracts/`、`tasks.md`。文首写 `> source: spec.md + design.md`。
+2. **强制引用**:唯一合法输入是已批准的 `spec.md`(设计稿可选——设计现由外部工具产出)。无 spec.md 则停下,回 discover-spec。
+3. 产出落到 `docs/sdd/<slug>/` 下:`plan.md`、`data-model.md`、`contracts/`、`tasks.md`。文首写 `> source: spec.md`。
 
 ## Phase -1 gates(动手前先过门,借 SDD / spec-kit)
 

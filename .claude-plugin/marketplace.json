@@ -7,8 +7,8 @@
     {
       "name": "sdd-suite",
       "source": "./",
-      "description": "三阶段 SDD skill 套件:需求方案制定 → 设计落地 → 技术架构。",
-      "version": "0.2.0"
+      "description": "spec 为中心的 SDD skill 套件:厚 spec.md → 外部设计工具 + coding agent,tech-spec 可选。",
+      "version": "0.3.0"
     }
   ]
 }

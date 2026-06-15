@@ -1,6 +1,6 @@
 ---
 name: sdd-router
-description: SDD 套件的入口与路由。判断用户当前处于需求 / 设计 / 技术哪个阶段,读取已落盘的中间态,把请求分发到 discover-spec、design-spec、tech-spec 或 sdd-orchestrate。Use when starting to build a product or feature, when unsure which phase to enter, or when resuming an in-progress SDD project. 触发词:做个产品 / 开发新功能 / 从需求开始 / 立项 / 写 spec / 做设计 / design.md / 技术方案 / 架构 / SDD / 需求评审 / 继续上次的项目。
+description: SDD 套件的入口与路由。读取已落盘的中间态,判断用户该进 discover-spec、该去外部设计工具 / coding agent、还是进 tech-spec(可选,复杂项目),或交给 sdd-orchestrate 编排。Use when starting to build a product or feature, when unsure which step to take, or when resuming an in-progress SDD project. 触发词:做个产品 / 开发新功能 / 从需求开始 / 立项 / 写 spec / 技术方案 / 架构 / SDD / 需求评审 / 继续上次的项目。
 ---
 
 # SDD Router
@@ -15,7 +15,7 @@ description: SDD 套件的入口与路由。判断用户当前处于需求 / 设
 
 ```bash
 ls docs/sdd/<slug>/ 2>/dev/null
-# 看是否存在 spec.md / design.md / plan.md / tasks.md
+# 看是否存在 spec.md / plan.md / tasks.md(design 由外部工具产出,不落在这)
 ```
 
 ## State Detection → 入口
@@ -23,16 +23,15 @@ ls docs/sdd/<slug>/ 2>/dev/null
 | 已落盘的中间态 | 用户在哪 | 路由到 |
 | --- | --- | --- |
 | 无 | 从零开始 | `discover-spec`(先把需求问清楚) |
-| 只有 `spec.md` | 需求已定,缺设计 | `design-spec` |
-| 有 `spec.md` + `design.md` | 设计已定,缺技术方案 | `tech-spec` |
-| 三者齐全 | 准备执行 | 移交实现(executing / 你的实现流程) |
+| 已有 `spec.md`(已批准) | 需求已定 | **出设计** → 引导用户把 spec + 风格参考喂外部 AI 设计工具(Claude Design / Open Design / Codex Product Design);**开发** → spec 交 coding agent;**复杂项目** → `tech-spec` |
+| 想出深度技术蓝图(复杂 / 团队) | 需要 ADR / 数据模型 / 契约 / 任务 | `tech-spec` |
 | 用户想一把跑完 / 不确定规模 | 需要编排 | `sdd-orchestrate`(它来判档 + 串 gate) |
 
 ## Routing Table(按意图)
 
 - "做个产品 / 这个功能要怎么做 / 帮我想清楚需求" → `discover-spec`
-- "需求定了,设计一下 UI / 配色 / 页面 / design.md" → `design-spec`
-- "设计好了,出技术方案 / 选型 / 架构 / 数据模型 / 拆任务" → `tech-spec`
+- "需求定了,出设计 / UI" → 不在本套件内:引导用户把 `spec.md + 风格参考` 喂给外部 AI 设计工具(Claude Design / Open Design / Codex Product Design)
+- "出技术方案 / 选型 / 架构 / 数据模型 / 拆任务(复杂项目)" → `tech-spec`
 - "整个流程帮我跑 / 这个改动该走多重的流程" → `sdd-orchestrate`
 
 ## 铁律

@@ -24,4 +24,6 @@
 ## 集体盲区 = 本套件的差异化
 
 设计有 4 个强 repo、需求有 3 个,但"为用户从零产出系统架构方案"几乎无人做透。
-所以本套件的 **tech-spec(P3)是原创为主**,以 SDD 方法论补九家的共同空洞。
+所以本套件的 **tech-spec 是原创为主**,以 SDD 方法论补九家的共同空洞。
+
+> v0.3 更新:`design-spec` 已移除——设计交给外部 AI 设计工具(Claude Design / Open Design / Codex Product Design),给它 `spec + 风格参考` 即可。上面那几个设计 repo(impeccable / open-design / awesome-design-md)现作为"设计工具背后的方法论"参考保留,它们的反 slop / 闭词表思路已 folded 进 README 的设计交接步。
