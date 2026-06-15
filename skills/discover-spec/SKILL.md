@@ -1,71 +1,98 @@
 ---
 name: discover-spec
-description: 产品需求方案制定(第一阶段)。支持三种入口——一个新想法、一个要复刻的竞品、或给已有产品新增的功能——通过结构化提问 / 逆向 / 竞品分析,收敛成一份可验收的 spec.md(验收标准 AC + 范围边界 + 未决项)。Use when starting requirements for a product or feature, whether from a raw idea, by cloning a validated competitor, or by discovering new features through competitive analysis, or when docs/sdd/<slug>/spec.md does not yet exist. 触发词:做个产品 / 新想法 / 这个功能 / 加功能 / 新功能 / 复刻 / 竞品 / 对标 / 需求是什么 / 写需求 / PRD / 验收标准 / 立项。不要用于 UI 视觉设计(用 design-spec)或技术架构(用 tech-spec)。
+description: 产品需求与方案制定(第一阶段)。支持三种入口——一个新想法、一个要复刻的竞品、或给已有产品新增的功能——通过结构化提问 / 逆向 / 竞品分析 / 主动技术研究,收敛成一份小白能照着往下走的 spec.md:战略立项 + 产品形态与分发(SEO/GEO)+ 品牌与产品体系 + 页面与功能清单 + 跨切面决策(多语言/账号/支付…)+ 核心技术实现方案(架构 + 复用现成 GitHub + API 服务选型)+ 带真实样例的验收标准 AC。Use when starting requirements for a product or feature, whether from a raw idea, by cloning a validated competitor, or by discovering new features through competitive analysis, or when docs/sdd/<slug>/spec.md does not yet exist. 触发词:做个产品 / 新想法 / 这个功能 / 加功能 / 复刻 / 竞品 / 对标 / 写需求 / PRD / 验收标准 / 立项 / 定位 / 品牌 / SEO / GEO / 分发 / 页面 / 功能清单 / 多语言 / 技术方案 / 架构 / 选型 / 用什么技术。不要用于纯 UI 视觉设计(那是 spec + 风格参考 → 设计工具)。
 ---
 
-# discover-spec · 需求方案制定
+# discover-spec · 需求与方案制定
 
-把"我想做个 X"逼问成一份机器和人都能照着干的 `spec.md`。这一阶段只回答 WHAT / WHY,严禁碰 HOW(技术、代码、架构)——见 `CONSTITUTION.md` 第 1 条。
+把"我想做个 X"逼问成一份**小白能照着往下走**的 `spec.md`:既有战略视角,又详细到 (1) 能直接喂设计工具出 UI,(2) 让人知道这东西技术上怎么搭、搭在谁的肩膀上。
+
+**边界(重要,别搞错):**
+- **写**:WHAT/WHY + 页面与功能清单 + 跨切面决策 + **核心技术实现方案(架构 + 复用现成 GitHub + API 服务选型)**。
+- **不写**:UI 视觉(布局/配色/组件——那是 `spec + 风格参考 → 设计工具` 出 design.md);以及完整代码实现(那是 build 阶段)。
+
+## 三条铁律(违反即打回)
+
+1. **拒绝假大空**:每个核心主张要有真实样例锚住。产品侧 = 真文案 / 真数据 / 真页面内容;**技术侧 = 真 GitHub 项目名 + 真 API 服务 + 真链接**,不是"用合适的技术栈"这种空话。
+2. **具体覆盖到底**:产品具体(真实文案/结果/每页功能)+ 技术具体(具体的库、具体的服务、具体的架构)。唯一不展开的是**完整代码**和**UI 视觉**。把"具体"推给"以后再说 / 下一阶段"是上一版最大的病。
+3. **具体 ≠ 编造**:格式样例标 `[ILLUSTRATIVE-EXAMPLE]`;未实测数字标 `[UNVERIFIED-NUMBER]`;**技术方案必须真去 WebSearch / GitHub 查过再写,引真实可点链接,绝不编造不存在的库 / API,也不凭记忆写过时的**。
+
+> 检验:把 spec 给三个人——一个设计工具、一个程序员、一个不懂技术的小白。设计工具能据它出 UI 吗?程序员能据它知道搭在哪些现成轮子上吗?小白能看懂为什么这么选吗?三个都行 → 合格。
 
 ## 启动
 
-1. 读 `CONSTITUTION.md`(插件根,定义跨阶段 gate)。作为 `/ohspec` 单独跑需求阶段、找不到时,按本 skill 内置规则继续即可。
-2. 确定 slug(产品名英文小写 + 连字符,如 `paycheckcity`;用户未指定就按此自动生成,不要猜),产出落到 `docs/sdd/<slug>/spec.md`。
-3. 判断**输入模式**(见下),按模式选开场。不要一上来就写文档。
+1. 读 `CONSTITUTION.md`(找不到按本 skill 内置规则继续)。
+2. 定 slug(英文小写+连字符,不猜),产出 `docs/sdd/<slug>/spec.md`。
+3. 判断**输入模式** + **产品形态**(见 `references/product-form-strategy.md`)。不要一上来写文档。
 
 ## 输入模式(先判断从哪进)
 
-三种入口,机制不同,但都收敛到**同一份 spec.md**。下游 design-spec / tech-spec 无差别。
-
-| 模式 | 你手上有什么 | 开场怎么走 | 产物里多一段 |
+| 模式 | 你手上有什么 | 开场 | 多产出 |
 | --- | --- | --- | --- |
-| **A · 从零 idea** | 一个想法 / 一句话 | interview mode + 六逼问,从用户脑子里逼出真需求(默认) | — |
-| **B · 复刻已验证** | 一个现成产品(URL / 名) | 逆向:扒它的核心功能与 AC,定"复刻范围 + 差异化点",需求主要来自产品 | `## 复刻范围 / 差异化点` |
-| **C · 竞品驱动加 feature** | 一个已有产品 + 一组竞品 | 竞品分析找 feature gap → 和用户讨论选 → 给新功能写 spec(范围限定为与现有产品集成) | `## 现有产品上下文` + `## 竞品对照` |
+| **A · 从零 idea** | 一个想法 | 三层逼问(默认) | — |
+| **B · 复刻已验证** | 一个现成产品 | 逆向扒功能与 AC,定复刻范围+差异化 | `## 复刻范围 / 差异化点` |
+| **C · 竞品驱动加 feature** | 已有产品+竞品 | 竞品分析找 gap→讨论选→写 spec | `## 现有产品上下文` + `## 竞品对照` |
 
-规则:
+- 判断不了就问一句。B/C 也跑三层逼问的关键几问。
+- 复用现成能力:竞品拆解用 `competitive-analysis` / competitor-research-analyst;SEO/GEO 审计用 `geo-hunter`。
+- B/C 必须多产出复刻范围 + 差异化点(见 `references/mode-b-scope.md`),竞品洞察逐条映射,一条不丢。
 
-- **判断不了模式就问一句**:"这是从零做、复刻某个产品、还是给已有产品加功能?"
-- **B / C 也要跑 interview 的关键几问**(谁用、为什么是现在、明确不做什么)——只是大部分需求从产品 / 竞品来,不是从访谈来。
-- **C 模式复用现成能力**:用 `competitive-analysis` skill / competitor-research-analyst agent 做竞品拆解与 feature gap,本 skill 不重造竞品分析;拿到 gap 后回到这里讨论选型 + 写 spec。
-- **B / C 必须多产出 `## 复刻范围` 和 `## 差异化点` 两段**——结构与硬规则见 `references/mode-b-scope.md`。**差异化点不得整段全是占位**,至少 1 条落地条目或 `[ASSUMPTION]`,否则立项理由悬空、过不了门。
-- **竞品洞察必须接线**:当有竞品分析(commonGaps / differentiation)传入,逐条映射进差异化点或 out-of-scope,**一条都不能丢**(见 mode-b-scope.md)。
-- **逆向 / 非交互豁免**:被 orchestrator 当 subagent 跑、无真人可问时,「至少一轮真问答」的 HARD-GATE 豁免方式 = 把六逼问转成 `[ASSUMPTION: … | 来源: …]` 自答(逆向映射见 `references/six-questions.md` 末尾),不算违反。
-- 不管哪个模式,最终产物都是带 AC-NNN + out-of-scope + `[NEEDS CLARIFICATION]` 的 spec.md。
+## 怎么问:三层逼问 + 两个必过 pass
 
-## Interview mode(模式 A 的核心;B / C 也问关键几问)
+三层逼问(详见 `references/six-questions.md`):
 
-- **一次只问 2-3 个问题**,等真实回答,再问下一组。禁止用单句 prompt 合成整份 spec。
-- 至少跑一轮真问答,才允许下笔写 spec。
-- **反谄媚**(borrow gstack):禁说"这个想法很棒/有意思"。每个回答都要表态——哪里站不住、哪里有风险。
-- 提问按产品阶段路由:0→1 找真需求,1→N 找瓶颈。详细问题清单见 `references/six-questions.md`。
+| 层 | 问什么 | 追问终点 |
+| --- | --- | --- |
+| 1 · 战略 | YC 六逼问 | 一个具体的人+场景 |
+| 2 · 产品级下钻 | 第一屏显示什么?给一条真实样例?点哪个控件、屏上变了什么? | 能画出那一屏 / 能写出一条真实样例 |
+| 3 · 形态与品牌 | 什么形态?website 的 SEO/GEO 怎么打?叫什么、什么声音? | 真实关键词 + 真实标题 + 真实定位句 |
 
-## 六个逼问(打开真需求)
+**外加两个必须主动过、不能静默跳的 pass:**
 
-按 `references/six-questions.md` 逐项过:需求现实性 / 现状替代方案 / 绝望级具体性 / 最窄切入 / 观察与意外 / 未来契合。每个问题三段式:Ask → Push-until(追问到具体)→ Red-flags(听到这些要警惕)。
+- **跨切面决策 pass**(见 `references/cross-cutting.md`):多语言 / 平台 / 账号 / 支付 / 隐私合规 / 可访问性…逐条**给推荐 + 理由 + 和用户确认**。不替他默默决定,也不漏。
+- **技术研究 pass**(见 `references/tech-and-reuse.md`):基于页面与功能清单,**主动 WebSearch / GitHub 搜现成方案和 API 服务**,优先复用,引真实链接。小白最需要这层。
 
-## 写 spec:结构与硬规则
+interview 纪律:
 
-产出 `spec.md`,必须包含:
+- **一次只问 2-3 个**,等真答再问下一组。至少一轮真问答才下笔。
+- **反谄媚**:不说"这想法很棒",每个回答表态哪里最脆。
+- **带方案来挑刺,不甩开放选择题**:产品细节、跨切面、技术决策都先给"**我建议 X,因为 Y,你定**",而不是"你想用什么"。把设计/选型外包给用户 = 偷懒。
+- **逆向 / 非交互豁免**:无真人时,六逼问转 `[ASSUMPTION]` + 构造 ≥2 条 `[ILLUSTRATIVE-EXAMPLE]`;**跨切面与技术 pass 照样过——技术 pass 即使逆向也要真去搜、给真实项目链接,不许用"无真人"当跳过借口**。
 
-- **背景 / 问题**:谁、在什么场景、现在怎么凑合(WHY)。
-- **验收标准 AC**:用 `references/ac-template.md` 的 **AC-NNN 六要素**(起始条件 / 触发 / 预期产出 / 禁止副作用 / 验证方法 / 优先级)。禁止 "correctly / securely / 优雅地" 这类不可验证的空词。
-- **EARS 句式**:把行为压成可验证条件。例:`IF 60 秒内校验失败 3 次 THEN 系统 SHALL 锁定账号 15 分钟`。
-- **Out of scope**(强制):明确这版不做什么。没有 out-of-scope 段不算完成。
-- **未决项**:所有不确定写成 `[NEEDS CLARIFICATION: 问题]`;从现状反推的写 `[ASSUMPTION: ...]`。
+## 写 spec:必含段
 
-## 防跳阶段(Rationalization Table)
+1. **背景 / 问题(WHY)**:具体的谁、真实场景、现在怎么凑合。
+2. **战略立项**:核心赌注、最窄切入、护城河、为什么现在、**放弃阈值(kill-criteria)**、**写码前最便宜的证伪动作**。
+3. **产品形态 & 分发**:按 `references/product-form-strategy.md`。website 必含 SEO + GEO,带真实关键词簇 + 真实标题/meta + 可被 AI 引用的答案块。
+4. **品牌与产品体系**:按 `references/brand-system.md`,定位/命名/声音/系统主线,每块真实样例。
+5. **页面与功能清单**:**有哪些页 + 每页功能 + 状态(空/加载/付费/错误)+ 对应 AC**。写功能与内容(可含真实文案样例),**不写 UI 视觉布局**。这是设计工具的直接输入。
+6. **跨切面决策**:按 `references/cross-cutting.md`,逐条列 多语言/平台/账号/支付/隐私… 的**决定 + 理由 + `[已确认]`/`[待确认]`**。
+7. **验收标准 AC**:按 `references/ac-template.md`,六要素 + 每条核心 AC 带 `示例:` 真实样例 + EARS。
+8. **核心技术实现方案**:按 `references/tech-and-reuse.md`——架构(一段+文字架构图)+ **复用的 GitHub 项目(真实名+链接+为什么选)** + **API 服务选型(auth/支付/邮件/TTS/生图… 真实服务+链接+定价量级)** + 不造轮子说明。到"小白照着能搭"的程度,**不写完整代码**。
+9. **Out of scope / BLOCKER / 未决项**。
 
-| 你可能冒出的念头 | 现实 |
+## 防跳阶段 + 红旗
+
+| 念头 | 现实 |
 | --- | --- |
-| "需求很简单,直接写代码吧" | 简单也要一句话 AC + out-of-scope,否则范围会漂。 |
-| "顺便把技术选型定了" | 停。HOW 是 tech-spec 的事,现在写会锁死后面。 |
-| "用户没回答,我替他假设" | 写成 `[NEEDS CLARIFICATION]`,不要静默假设。 |
+| "需求简单,直接写代码" | 简单也要 AC + 页面清单 + 技术方案,否则没法往下走。 |
+| "技术我不懂,先跳过" | 不行——小白最需要这层。去 GitHub/WebSearch 搜了再写。 |
+| "具体样例属于 design 阶段" | 错。真实文案/页面功能就在这写;只有 UI 视觉留给设计工具。 |
+| "技术栈我凭经验写一个" | 假大空技术。真去搜现成项目和服务,引真实链接,别造轮子也别凭空编。 |
+| "多语言/支付以后说" | 跨切面决策要主动给建议 + 和用户确认,不静默跳。 |
 
-**红旗**:写到 React / 数据库 / API / 组件库 → 你跳到 HOW 了,删掉,回到 WHAT。
+**红旗(命中即回炉)**:
+- 通篇没有一个真实样例 → 假大空骨架。
+- website 没有真实关键词 / 真实标题 → 形态盲。
+- 只有功能清单,不谈定位/命名/声音/系统 → 功能汤。
+- 精确假数字冒充事实 → 具体的假。
+- **没有页面与功能清单 → 设计工具接不住,打回。**
+- **技术方案凭空编、没去 GitHub / 没引真实链接 / 重复造已有轮子 → 假大空技术,打回。**
+- **多语言 / 账号 / 支付等跨切面决策被静默跳过 → 漏决策,打回。**
+- 写完整代码实现 → 越界到 build,收住给方案就行。
 
 ## 校验与交接
 
-- 跑 `scripts/validate-spec.mjs docs/sdd/<slug>/spec.md`:检查 AC 段、out-of-scope 段、是否残留 `[NEEDS CLARIFICATION]`。
-- **HARD-GATE**:把 spec 给用户 review,明确请求批准。未批准不得进入 design-spec。
-- terminal state:用户批准后 → `design-spec`。
+- 跑 `scripts/validate-spec.mjs docs/sdd/<slug>/spec.md`:查 AC / out-of-scope / 具体性 / 品牌段 / **页面清单段 / 技术方案段** / 残留未决项。
+- **过 validate ≠ 合格证**:它只查结构,查不了样例真假、技术方案搜没搜、假设验没验。
+- **HARD-GATE**:把 spec 给用户 review,明确请求批准。未批准不得进入设计 / build。
