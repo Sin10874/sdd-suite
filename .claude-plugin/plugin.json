@@ -1,6 +1,6 @@
 {
   "name": "sdd-suite",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "三阶段 SDD skill 套件:需求方案制定 → 设计落地 → 技术架构。用文件化中间态 + 强制引用 + 阶段间 gate,让 AI 从模糊想法走到可执行架构而不跑偏。",
   "author": {
     "name": "ZOPC"
