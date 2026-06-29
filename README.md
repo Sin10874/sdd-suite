@@ -158,7 +158,7 @@ for s in sdd-suite/skills/*/; do ln -s "$(pwd)/$s" ~/.claude/skills/"$(basename 
 /sdd-suite:tech-spec                                   # 复杂项目才用    → 架构蓝图
 ```
 - 也可以**不打命令**,直接说"帮我写个 X 的 spec",`discover-spec` 会按 description 自动触发。
-- 嫌前缀长?见下方「可选 · 短名别名」小节,一键把 `/ohspec` `/genplan` 装到本地。
+- 嫌前缀长、或想在 Codex / opencode / Kimi / pi 上也能调起?见下方「短名命令 · 一键装到各 agent」。
 - 流程:`discover-spec` 逼问 + 给建议 → 落成 `spec.md` 停下等你 review;点头(web/App 先去外部设计工具出稿)后 `gen-plan` 拆成可并行执行的 `tasks.md` + `plan.md`,交给 coding agent / worktree 开干。
 
 ## 更新(已经装过旧版的)
@@ -173,14 +173,28 @@ for s in sdd-suite/skills/*/; do ln -s "$(pwd)/$s" ~/.claude/skills/"$(basename 
   然后新开会话。
 - **验证**:能触发 `/sdd-suite:gen-plan`、或说"把 spec 拆成开发计划"自动调起 gen-plan,即更新成功。
 
-## 可选 · 短名别名(/ohspec /genplan /design)
+## 短名命令 · 一键装到各 agent(跨平台)
 
-plugin 命令强制带 `sdd-suite:` 前缀(`/sdd-suite:discover-spec`)。嫌长、或想沿用顺手的短名,repo 的 `aliases/` 备了三个薄封装,拷到本地 commands 目录即可:
+plugin 的命令强制带 `sdd-suite:` 前缀。想要短命令、或想在 **Codex / opencode / Kimi / pi** 上也能一句话调起,跑这个跨平台安装器:
 
 ```bash
-cp aliases/*.md ~/.claude/commands/
+bash install-commands.sh            # 检测本机装了哪些 agent,把命令铺到各自目录
+bash install-commands.sh --dry-run  # 先看会写哪些文件,不实际改动
 ```
-之后 `/ohspec`(→ discover-spec)、`/genplan`(→ gen-plan)、`/design`(整理设计 brief 喂外部工具)直接可用。它们只是触发对应 skill 的薄壳,逻辑都在 skill 里 —— 所以 plugin 没装就用不了,别名只是给命令换个短名。
+
+它检测本机 agent,把 `aliases/` 的三个命令铺到各家正确的目录(格式不兼容的自动转换):
+
+| Agent | 调用 | 怎么铺 |
+|---|---|---|
+| Claude Code | `/sdd:ohspec` | md 原样 → `~/.claude/commands/sdd/` |
+| opencode | `/sdd:ohspec` | md 原样 → `~/.config/opencode/commands/sdd/` |
+| Codex | `/prompts:sdd-ohspec` | md → `~/.codex/prompts/`(已 deprecated)+ SKILL.md 软链到 `skills/`(官方推荐) |
+| Kimi | `/skill:sdd-ohspec` | 转成 `SKILL.md` → `~/.kimi/skills/` |
+| pi | `/sdd-ohspec` | 转格式(`$ARGUMENTS`→`{{input}}`)→ `~/.pi/agent/prompts/` |
+| Kiro | 项目内 | steering 文件,需在各项目 `.kiro/steering/` 内装 |
+| ZCode | — | 命令磁盘格式未公开,在 ZCode 内手动保存 |
+
+诚实:**Kimi / pi / Kiro 的命令机制跟 Claude Code 不兼容**,脚本做了格式转换;ZCode 无法文件级分发。命令只是触发对应 skill 的薄壳 —— 对应 skill 没装时用不了。
 
 ## 设计思路
 
