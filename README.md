@@ -150,14 +150,37 @@ for s in sdd-suite/skills/*/; do ln -s "$(pwd)/$s" ~/.claude/skills/"$(basename 
 
 ## 快速开始
 
-装好后,在任意项目里:
+装好后,在任意项目里。**装了 plugin,每个 skill 自动就是一条 slash 命令**(带 `sdd-suite:` 前缀,不用自己封装):
 ```
-/ohspec 一个给独立开发者记账的工具       # ① 从零 idea     → spec.md
-/ohspec 复刻 Truity 做个在线测试站        # ① 对标已验证产品 → spec.md
-/genplan                                  # ② spec 批准后,拆成 tasks.md + plan.md
+/sdd-suite:discover-spec 一个给独立开发者记账的工具    # ① 从零 idea     → spec.md
+/sdd-suite:discover-spec 复刻 Truity 做个在线测试站     # ① 对标已验证产品 → spec.md
+/sdd-suite:gen-plan                                    # ② spec 批准后   → tasks.md + plan.md
+/sdd-suite:tech-spec                                   # 复杂项目才用    → 架构蓝图
 ```
-- `/ohspec` 用 `discover-spec`:判断你是从零做、复刻、还是加功能 → 没想清的地方逼问你、给建议让你挑 → 落成 `spec.md`,停下等你 review。
-- spec 点头后(web/App 项目先去外部设计工具出设计稿),`/genplan` 用 `gen-plan` 把 spec(+设计稿)拆成可并行执行的开发计划,再交给 coding agent / worktree 开干。
+- 也可以**不打命令**,直接说"帮我写个 X 的 spec",`discover-spec` 会按 description 自动触发。
+- 嫌前缀长?见下方「可选 · 短名别名」小节,一键把 `/ohspec` `/genplan` 装到本地。
+- 流程:`discover-spec` 逼问 + 给建议 → 落成 `spec.md` 停下等你 review;点头(web/App 先去外部设计工具出稿)后 `gen-plan` 拆成可并行执行的 `tasks.md` + `plan.md`,交给 coding agent / worktree 开干。
+
+## 更新(已经装过旧版的)
+
+上半场用过 v0.3 的,这次 v0.4 新增了 `gen-plan` 计划层,按你的装法升级:
+
+- **plugin 装法**:`/plugin update sdd-suite`,再 `/reload-plugins`(或重开会话)。新命令 `/sdd-suite:gen-plan` 自动出现。
+- **软链装法**:`cd sdd-suite && git pull`。注意 `gen-plan` 是**新增的 skill 目录**,`git pull` 只更新已软链的旧 skill、不会自动补新软链,手动加一条:
+  ```bash
+  ln -s "$(pwd)/skills/gen-plan" ~/.claude/skills/gen-plan   # Codex 同理软链到 ~/.codex/skills/
+  ```
+  然后新开会话。
+- **验证**:能触发 `/sdd-suite:gen-plan`、或说"把 spec 拆成开发计划"自动调起 gen-plan,即更新成功。
+
+## 可选 · 短名别名(/ohspec /genplan /design)
+
+plugin 命令强制带 `sdd-suite:` 前缀(`/sdd-suite:discover-spec`)。嫌长、或想沿用顺手的短名,repo 的 `aliases/` 备了三个薄封装,拷到本地 commands 目录即可:
+
+```bash
+cp aliases/*.md ~/.claude/commands/
+```
+之后 `/ohspec`(→ discover-spec)、`/genplan`(→ gen-plan)、`/design`(整理设计 brief 喂外部工具)直接可用。它们只是触发对应 skill 的薄壳,逻辑都在 skill 里 —— 所以 plugin 没装就用不了,别名只是给命令换个短名。
 
 ## 设计思路
 
